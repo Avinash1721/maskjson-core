@@ -15,15 +15,21 @@
   "files": [
     "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avinash1721/maskjson-core.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Avinash1721/maskjson-core/issues"
+  },
+  "homepage": "https://maskjson.com",
   "engines": {
     "node": ">=18"
   },
+  "sideEffects": false,
   "scripts": {
-    "dev": "npx tsup src/index.ts --watch --dts",
-    "build": "npx tsup src/index.ts --format cjs,esm --dts --clean --minify",
-    "test": "npx vitest run",
-    "test:watch": "npx vitest",
-    "benchmark": "npx tsx benchmark/benchmark.ts",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify",
+    "test": "vitest run",
     "lint": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },
@@ -31,10 +37,9 @@
     "json",
     "redact",
     "mask",
-    "security",
     "pii",
     "privacy",
-    "typescript"
+    "security"
   ],
   "author": "MaskJSON",
   "license": "MIT",

@@ -41,7 +41,9 @@ export function redact<T>(input: T, options: RedactOptions = {}): T {
 
         // If parent was already redacted, we can skip children
         if (redactedNodes.has(parent)) {
-            redactedNodes.add(value); // Mark child as redacted too
+            if (value && typeof value === 'object') {
+                redactedNodes.add(value); // Mark child as redacted too
+            }
             continue;
         }
 
