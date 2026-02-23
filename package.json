@@ -19,11 +19,11 @@
     "node": ">=18"
   },
   "scripts": {
-    "dev": "tsup src/index.ts --watch --dts",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "benchmark": "tsx benchmark/benchmark.ts",
+    "dev": "npx tsup src/index.ts --watch --dts",
+    "build": "npx tsup src/index.ts --format cjs,esm --dts --clean --minify",
+    "test": "npx vitest run",
+    "test:watch": "npx vitest",
+    "benchmark": "npx tsx benchmark/benchmark.ts",
     "lint": "tsc --noEmit",
     "prepublishOnly": "npm run build"
   },

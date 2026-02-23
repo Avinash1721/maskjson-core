@@ -1,4 +1,4 @@
-import { RedactOptions, Redactable } from './types';
+import { RedactOptions } from './types';
 import { isObject, isArray, deepClone } from './utils';
 import { isPathMatch, isKeyMatch } from './matcher';
 import { iterateObject } from './traversal';
@@ -31,12 +31,19 @@ export function redact<T>(input: T, options: RedactOptions = {}): T {
     let result = mutate ? input : deepClone(input);
 
     const nodes = iterateObject(result);
+    const redactedNodes = new WeakSet();
 
     for (const node of nodes) {
         const { value, path, parent, key } = node;
 
         // Skip root node
         if (parent === null) continue;
+
+        // If parent was already redacted, we can skip children
+        if (redactedNodes.has(parent)) {
+            redactedNodes.add(value); // Mark child as redacted too
+            continue;
+        }
 
         let shouldRedact = false;
 
@@ -83,11 +90,13 @@ export function redact<T>(input: T, options: RedactOptions = {}): T {
 
                 (parent as any)[key] = newValue;
             }
+
+            // Mark this value as redacted to skip subtree
+            if (value && typeof value === 'object') {
+                redactedNodes.add(value);
+            }
         }
     }
-
-    // Cleanup undefined if it was an array (optional, but cleaner)
-    // However, the iterative traversal might have already skipped them.
 
     return result;
 }
@@ -107,7 +116,7 @@ export function redactJsonString(
         const redacted = redact(parsed, options);
         return JSON.stringify(redacted);
     } catch (e) {
-        // If invalid JSON, return as is or handle error
+        // If invalid JSON, return as is
         return jsonString;
     }
 }
